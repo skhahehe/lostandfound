@@ -1,4 +1,5 @@
-const API_URL = import.meta.env.VITE_API_URL;
+// const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = "https://lostandfound-backend-production-634d.up.railway.app";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./../Styling/found.css";
@@ -39,7 +40,7 @@ function Report({ item, fetchLostItems, fetchFoundItems }) {
       // Determine endpoint based on Lost/Found
       const endpoint = item.toLowerCase() === "lost" ? "lost" : "found";
 
-      const res = await fetch(`${API_URL}/api/${endpoint}`, {
+      const res = await fetch(`${BASE_URL}/api/${endpoint}`, {
         method: "POST",
         body: form, // FormData automatically sets multipart/form-data
       });
