@@ -1,5 +1,5 @@
 // const API_URL = import.meta.env.VITE_API_URL;
-const BASE_URL = "https://lostandfound-backend-production-634d.up.railway.app";
+const BASE_URL = import.meta.env.VITE_API_URL;
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./../Styling/found.css";

@@ -1,4 +1,5 @@
 // const API_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = import.meta.env.VITE_API_URL;
 import { useState, useRef, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -7,7 +8,7 @@ import Report from "./Report.jsx";
 import ItemDetails from "./details.jsx";
 import "./../Styling/App.css";
 
-const BASE_URL = "https://lostandfound-backend-production-634d.up.railway.app";
+// const BASE_URL = "https://lostandfound-backend-production-634d.up.railway.app";
 const images = import.meta.glob("./assets/*.{png,jpg,jpeg}", {
   eager: true,
 });
