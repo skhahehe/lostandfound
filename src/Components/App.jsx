@@ -1,14 +1,15 @@
 // const API_URL = import.meta.env.VITE_API_URL;
-const BASE_URL = import.meta.env.VITE_API_URL;
+// const BASE_URL = import.meta.env.VITE_API_URL;
 import { useState, useRef, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import Lost from "./Lost.jsx";
 import Report from "./Report.jsx";
 import ItemDetails from "./details.jsx";
+import InfoPage from "./InfoPage.jsx";
 import "./../Styling/App.css";
 
-// const BASE_URL = "https://lostandfound-backend-production-634d.up.railway.app";
+const BASE_URL = "https://lostandfound-backend-production-634d.up.railway.app";
 const images = import.meta.glob("./assets/*.{png,jpg,jpeg}", {
   eager: true,
 });
@@ -45,17 +46,37 @@ export default function App() {
   }, []);
 
   //////////////
-  const fetchLostItems = () => {
-    fetch(`${BASE_URL}/api/lost`)
-      .then((res) => res.json())
-      .then((data) => {
-        const lostWithType = data.items.map((item) => ({
-          ...item,
-          type: "lost",
-        }));
-        setLostProject(lostWithType);
-      })
-      .catch((err) => console.error(err));
+  // const fetchLostItems = () => {
+  //   fetch(`${BASE_URL}/api/lost`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       const lostWithType = data.items.map((item) => ({
+  //         ...item,
+  //         type: "lost",
+  //       }));
+  //       setLostProject(lostWithType);
+  //     })
+  //     .catch((err) => console.error(err));
+  // };
+  const fetchLostItems = async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/lost`);
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      const contentType = res.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new TypeError("Expected JSON but received HTML");
+      }
+      const data = await res.json();
+      const lostWithType = data.items.map((item) => ({
+        ...item,
+        type: "lost",
+      }));
+      setLostProject(lostWithType);
+    } catch (err) {
+      console.error("Error fetching lost items:", err);
+    }
   };
 
   const fetchFoundItems = () => {
@@ -99,8 +120,37 @@ export default function App() {
           </div>
           {menuOpen && (
             <div className="menu-options">
-              <button onClick={() => handleNavigate("/lost")}>📦 Lost</button>
-              <button onClick={() => handleNavigate("/found")}>🔍 Found</button>
+              <button 
+                className={location.pathname === "/lost" ? "active" : ""} 
+                onClick={() => handleNavigate("/lost")}
+              >
+                📦 Lost
+              </button>
+              <button 
+                className={location.pathname === "/found" ? "active" : ""} 
+                onClick={() => handleNavigate("/found")}
+              >
+                🔍 Found
+              </button>
+              <hr style={{ border: "0", borderTop: "1px solid #eee", margin: "0.2rem 0" }} />
+              <button 
+                className={location.pathname === "/contact" ? "active" : ""} 
+                onClick={() => handleNavigate("/contact")}
+              >
+                📞 Contact Us
+              </button>
+              <button 
+                className={location.pathname === "/about" ? "active" : ""} 
+                onClick={() => handleNavigate("/about")}
+              >
+                ℹ️ About
+              </button>
+              <button 
+                className={location.pathname === "/help" ? "active" : ""} 
+                onClick={() => handleNavigate("/help")}
+              >
+                ❓ Help
+              </button>
             </div>
           )}
         </div>
@@ -116,7 +166,7 @@ export default function App() {
         {/* ///////////////////////// */}
         {(location.pathname === "/lost" || location.pathname === "/found") && (
           <div
-            className={`search-containe ${
+            className={`search-container ${
               showSearch ? "expanded" : "collapsed"
             }`}
             ref={searchRef}
@@ -211,6 +261,9 @@ export default function App() {
             />
           }
         />
+        <Route path="/contact" element={<InfoPage title="Contact Us" />} />
+        <Route path="/about" element={<InfoPage title="About Us" />} />
+        <Route path="/help" element={<InfoPage title="Help Center" />} />
       </Routes>
     </>
   );

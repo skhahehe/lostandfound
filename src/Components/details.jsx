@@ -17,24 +17,26 @@ function ItemDetails({ projects }) {
 
       <div className="details-card">
         <img src={item.imageURL || bag} alt={item.name} />
-        <h2>{item.name}</h2>
-        {item.contact && (
+        <div className="details-info">
+          <h2>{item.name}</h2>
+          {item.contact && (
+            <p>
+              <strong>Contact:</strong> {item.contact}
+            </p>
+          )}
           <p>
-            <strong>Contact:</strong> {item.contact}
+            <strong>Location:</strong> {item.location}
           </p>
-        )}
-        <p>
-          <strong>Location:</strong> {item.location}
-        </p>
-        <p>
-          <strong>Date:</strong>
-          {new Date(item.date).toLocaleDateString("en-GB")}
-        </p>
-        {item.description && (
           <p>
-            <strong>Description:</strong> {item.description}
+            <strong>Date:</strong>
+            {new Date(item.date).toLocaleDateString("en-GB")}
           </p>
-        )}
+          {item.description && (
+            <p>
+              <strong>Description:</strong> {item.description}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );
