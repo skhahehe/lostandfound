@@ -10,7 +10,7 @@ import InfoPage from "./InfoPage.jsx";
 import SignUp from "./SignUp.jsx";
 import "./../Styling/App.css";
 
-const BASE_URL = "https://lostandfound-backend-production-634d.up.railway.app";
+const BASE_URL = "https://lostandfound-jade.vercel.app/";
 const images = import.meta.glob("./assets/*.{png,jpg,jpeg}", {
   eager: true,
 });
