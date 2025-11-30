@@ -1,12 +1,13 @@
 // const API_URL = import.meta.env.VITE_API_URL;
 // const BASE_URL = import.meta.env.VITE_API_URL;
 import { useState, useRef, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import Lost from "./Lost.jsx";
 import Report from "./Report.jsx";
 import ItemDetails from "./details.jsx";
 import InfoPage from "./InfoPage.jsx";
+import SignUp from "./SignUp.jsx";
 import "./../Styling/App.css";
 
 const BASE_URL = "https://lostandfound-backend-production-634d.up.railway.app";
@@ -121,19 +122,6 @@ export default function App() {
           {menuOpen && (
             <div className="menu-options">
               <button 
-                className={location.pathname === "/lost" ? "active" : ""} 
-                onClick={() => handleNavigate("/lost")}
-              >
-                📦 Lost
-              </button>
-              <button 
-                className={location.pathname === "/found" ? "active" : ""} 
-                onClick={() => handleNavigate("/found")}
-              >
-                🔍 Found
-              </button>
-              <hr style={{ border: "0", borderTop: "1px solid #eee", margin: "0.2rem 0" }} />
-              <button 
                 className={location.pathname === "/contact" ? "active" : ""} 
                 onClick={() => handleNavigate("/contact")}
               >
@@ -158,9 +146,32 @@ export default function App() {
         <div className="center-header">
           {(location.pathname === "/lost" ||
             location.pathname === "/found") && (
-            <button className="report-btn-header" onClick={handleReportClick}>
-              {item}
-            </button>
+            <div className="quick-switch">
+              <button
+                className={`switch-btn ${
+                  location.pathname === "/lost" ? "active" : ""
+                }`}
+                onClick={() => handleNavigate("/lost")}
+              >
+                Lost
+              </button>
+              <button
+                className="report-btn-header"
+                onClick={handleReportClick}
+                aria-label={item}
+                title={item}
+              >
+                +
+              </button>
+              <button
+                className={`switch-btn ${
+                  location.pathname === "/found" ? "active" : ""
+                }`}
+                onClick={() => handleNavigate("/found")}
+              >
+                Found
+              </button>
+            </div>
           )}
         </div>
         {/* ///////////////////////// */}
@@ -203,21 +214,34 @@ export default function App() {
                 <option value="descending">Sort by: Z → A</option>
               </select>
             </div>
+
+            <button
+              className="auth-link"
+              type="button"
+              onClick={() => navigate("/signup")}
+            >
+              Sign Up
+            </button>
           </div>
+        )}
+
+        {location.pathname === "/signup" && (
+          <button
+            className="menu-header home-menu-btn"
+            type="button"
+            onClick={() => navigate("/lost")}
+            aria-label="Home"
+            title="Home"
+          >
+            🏠
+          </button>
         )}
       </header>
 
       <Routes>
         <Route
           path="/"
-          element={
-            <Lost
-              search={Search}
-              sortOrder={sortOrder}
-              projects={lostItem}
-              item={item}
-            />
-          }
+          element={<Navigate to="/lost" replace />}
         />
         <Route
           path="/lost"
@@ -264,6 +288,7 @@ export default function App() {
         <Route path="/contact" element={<InfoPage title="Contact Us" />} />
         <Route path="/about" element={<InfoPage title="About Us" />} />
         <Route path="/help" element={<InfoPage title="Help Center" />} />
+        <Route path="/signup" element={<SignUp />} />
       </Routes>
     </>
   );
